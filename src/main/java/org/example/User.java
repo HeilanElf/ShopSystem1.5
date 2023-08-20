@@ -10,8 +10,6 @@ class User {
     ShopUser shopUser=new ShopUser();
     LogIn logIn=new LogIn();
     Scanner scanner=new Scanner(System.in);
-//    private final String basePath = System.getProperty("user.dir") + "//src//main//java//org//example//text//";
-//    String filePath;
     public int passwordUser(int command){
         int exit=1;
         if(command==1){
@@ -139,7 +137,8 @@ class User {
     }
 }
 class PasswordUser{
-
+    private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
+    private final String driverName = "org.sqlite.JDBC";
     public boolean forgotPassword(String username, String email) {
         return false;
     }
@@ -148,7 +147,8 @@ class PasswordUser{
     }
 }
 class ShopUser{
-
+    private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
+    private final String driverName = "org.sqlite.JDBC";
     public void checkout() {
     }
 

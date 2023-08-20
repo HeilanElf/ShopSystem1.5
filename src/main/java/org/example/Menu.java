@@ -84,4 +84,7 @@ class Menu {
         System.out.println("         2--开始购物");
         System.out.println("==============================");
     }
+
+    public void showDuctionModify() {showFileContent("DuctionModify.txt");
+    }
 }
