@@ -137,8 +137,8 @@ class User {
     }
 }
 class PasswordUser{
-    private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
-    private final String driverName = "org.sqlite.JDBC";
+    // private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
+    // private final String driverName = "org.sqlite.JDBC";
     public boolean forgotPassword(String username, String email) {
         return false;
     }
@@ -147,8 +147,8 @@ class PasswordUser{
     }
 }
 class ShopUser{
-    private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
-    private final String driverName = "org.sqlite.JDBC";
+    // private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
+    // private final String driverName = "org.sqlite.JDBC";
     public void checkout() {
     }
 

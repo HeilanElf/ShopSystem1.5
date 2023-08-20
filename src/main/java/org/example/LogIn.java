@@ -257,7 +257,7 @@ class Regest {
         return fileContent;
     }
     private String getInput(String prompt) {
-        Scanner scanner = new Scanner(System.in);
+       
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }

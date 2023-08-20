@@ -1,8 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -602,7 +600,6 @@ class DuctionMaster {
     }
 
     public void addDuctionInfo() {
-        String sheetName="DuctionMaster";
         System.out.print("请输入商品编号：");
         String id = scanner.nextLine();
         System.out.print("请输入商品名称：");
