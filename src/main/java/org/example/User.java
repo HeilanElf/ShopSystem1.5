@@ -334,6 +334,7 @@ class ShopUser{
         String newLevel=getLevel(price);
         String newHost=String.valueOf(price);
         ductionMaster.modifyDuctionInfoBykey(tableName,regest.getCurrentuserName(),"name",newLevel,"level");
+        ductionMaster.modifyDuctionInfoBykey(tableName,regest.getCurrentuserName(),"name",newHost,"cost");
     }
 
     private String getLevel(double ptice) {
