@@ -265,7 +265,7 @@ class UserMaster {
     }
 
     public void deleteUserData(String userID) {
-        if (deleteByKey("UserMaster", userID, "id")) {
+        if (deleteByKey("UserMaster", userID, "id")&&deleteByKey("PasswordMaster",userID,"id")) {
             System.out.println("删除成功！");
         } else {
             System.out.println("删除失败！");
@@ -577,7 +577,7 @@ class DuctionMaster {
 
     }
 
-    private boolean modifyDuctionInfoBykey(String tableName,String content,String matchkey,String newVlue,String modikey) {
+    public boolean modifyDuctionInfoBykey(String tableName,String content,String matchkey,String newVlue,String modikey) {
         //修改数据库中tableName表中所有与字段matchkey中content相匹配的那一行信息，修改的位置是在该行的modikey字段下，新值为newVlue.修改成功后返回true,否则false.
         try {
             Class.forName(driverName);
@@ -602,9 +602,13 @@ class DuctionMaster {
     }
 
     public void addDuctionInfo() {
-        String sheetName="DuctionMaster";
         System.out.print("请输入商品编号：");
         String id = scanner.nextLine();
+        while(checkIDExit(id)){
+            System.out.println("该类商品已存在，若要添加请修改库存即可！");
+            System.out.print("请输入新商品编号：");
+            id=scanner.nextLine();
+        }
         System.out.print("请输入商品名称：");
         String name = scanner.nextLine();
         System.out.print("请输入生产厂家：");
@@ -630,6 +634,30 @@ class DuctionMaster {
         }else{
             System.out.println("添加失败！");
         }
+    }
+
+    private boolean checkIDExit(String id) {
+        return IDExit("DuctionMaster",id);
+    }
+
+    private boolean IDExit(String tableName,String id) {
+        try {
+            Class.forName(driverName);
+            Connection connection = DriverManager.getConnection(bdULI);
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName + " WHERE id = '" + id + "'");
+            boolean sucess = false;
+            if (resultSet.next()) {
+                sucess = true;
+            }
+            resultSet.close();
+            statement.close();
+            connection.close();
+            return sucess;
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        return false;
     }
 
     private boolean insertDuctionInfo(String tableName, List<String> ductionList) {

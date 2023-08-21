@@ -51,9 +51,9 @@ class LogIn {
             }
         }
         if (command == 2) {
-            System.out.print("请输入用户名：");
+            System.out.print("请输入您的用户名：");
             userName = scanner.next();
-            System.out.print("请输您的密码：");
+            System.out.print("请输入您的密码：");
             password = isTrueEnter.passwordhefa(scanner.next());
             boolean userExists = userExit(userName);
             if (!userExists) {
@@ -65,9 +65,11 @@ class LogIn {
                     System.out.println("用户名或密码错误！请重新输入：");
                     System.out.print("用户名：");
                     userName = scanner.next();
+                    scanner.nextLine();
                     if (userExit(userName)) {
                         System.out.print("密码：");
-                        password = isTrueEnter.passwordhefa(scanner.next());
+                        password = scanner.next();
+                        scanner.nextLine();
                     } else {
                         System.out.println("用户名或密码错误，是否继续？（Y/N）");
                         String confirm = scanner.next();
@@ -79,6 +81,8 @@ class LogIn {
 
                 }
                 regest.setCurrentUserName(userName);
+                ShopUser shopUser=new ShopUser();
+                shopUser.clearSheetData("CurrentShopCart");
             }
         }
         if (count > 5) {
@@ -97,6 +101,10 @@ class LogIn {
     public void regestuser() {
         System.out.print("请输入您的用户名:");
         String userName = scanner.next();
+        while (cheakExit("PasswordMaster", userName)) {
+            System.out.print("该用户已存在！请重新输入您的用户名：");
+            userName = scanner.next();
+        }
         System.out.print("请输入您的密码：");
         String password = isTrueEnter.passwordhefa(scanner.next());
         System.out.print("请确认您的密码：");
@@ -107,6 +115,7 @@ class LogIn {
         } else {
             System.out.println("密码不一致！");
         }
+
     }
 
     public boolean userLogin(String userName, String password) {
@@ -256,21 +265,23 @@ class Regest {
         }
         return fileContent;
     }
+
     private String getInput(String prompt) {
         Scanner scanner = new Scanner(System.in);
         System.out.print(prompt);
         return scanner.nextLine().trim();
     }
-    public void userRegest(String id,String userName) {
+
+    public void userRegest(String id, String userName) {
         String phoneNumber = getInput("请输入手机号：");
         String email = getInput("请输入邮箱：");
         String registDate = getCurrentDate();
-        String content = id + "," + userName + "," + "铜牌客户" +","+registDate+",0,"+phoneNumber+","+email;
-        List<String> inforList=List.of(content);
-        try{
+        String content = id + "," + userName + "," + "铜牌客户" + "," + registDate + ",0," + phoneNumber + "," + email;
+        List<String> inforList = List.of(content);
+        try {
             Class.forName(driverName);
-            Connection connection=DriverManager.getConnection(bdULI);
-            PreparedStatement preparedStatement=connection.prepareStatement("INSERT INTO UserMaster (id,name,level,date,cost,phoneNumber,email) VALUES (?,?,?,?,?,?,?)");
+            Connection connection = DriverManager.getConnection(bdULI);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO UserMaster (id,name,level,date,cost,phoneNumber,email) VALUES (?,?,?,?,?,?,?)");
             for (String info : inforList) {
                 String[] values = info.split(","); // 拆分逗号分隔的值
                 if (values.length >= 7) {
@@ -286,7 +297,7 @@ class Regest {
             }
             preparedStatement.close();
             connection.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
     }
