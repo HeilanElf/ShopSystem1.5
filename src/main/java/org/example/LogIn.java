@@ -2,6 +2,8 @@ package org.example;
 
 import java.io.*;
 import java.nio.file.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,19 +31,22 @@ class LogIn {
                 System.out.println("管理员不存在！");
                 count = 5;
             } else {
-                while (!adminLogin(userName, password) && count < 5) {
+                while (!adminLogin(userName, password) && count < 6) {
                     count++;
                     System.out.println("管理员不存在或密码错误！");
                     System.out.print("用户名：");
                     userName = scanner.next();
-                    if (adminExit(userName)) {
+                    if (adminExit(userName)&&count<5) {
                         System.out.print("密码：");
                         password = scanner.next();
                     } else {
+                        if(count<5&&count>3){
+                            System.out.print("您已多次失败！再有三次错误账户即将被锁定！");
+                        }
                         System.out.println("用户名或密码错误，是否继续？（Y/N）");
                         String confirm = scanner.next();
                         if (!confirm.equalsIgnoreCase("Y")) {
-                            count = 10;
+                            count = 5;
                             break;
                         }
                     }
@@ -60,21 +65,24 @@ class LogIn {
                 System.out.println("用户不存在！");
                 count = 5;
             } else {
-                while (!userLogin(userName, password) && count < 5) {
+                while (!userLogin(userName, password) && count < 6) {
                     count++;
                     System.out.println("用户名或密码错误！请重新输入：");
                     System.out.print("用户名：");
                     userName = scanner.next();
                     scanner.nextLine();
-                    if (userExit(userName)) {
+                    if (userExit(userName)&&count<5) {
                         System.out.print("密码：");
-                        password = scanner.next();
+                        password = isTrueEnter.passwordhefa(scanner.next());
                         scanner.nextLine();
                     } else {
+                        if(count<5&&count>3){
+                            System.out.print("您已多次失败！再有三次错误账户即将被锁定！");
+                        }
                         System.out.println("用户名或密码错误，是否继续？（Y/N）");
                         String confirm = scanner.next();
                         if (!confirm.equalsIgnoreCase("Y")) {
-                            count = 10;
+                            count = 5;
                             break;
                         }
                     }
@@ -119,6 +127,7 @@ class LogIn {
     }
 
     public boolean userLogin(String userName, String password) {
+        password=encryptPassword(password);
         return checkLoin("PasswordMaster", userName, password);
     }
 
@@ -127,13 +136,27 @@ class LogIn {
     }
 
     public boolean adminLogin(String userName, String password) {
+        password=encryptPassword(password);
         return checkLoin("Master", userName, password);
     }
 
     public boolean adminExit(String userName) {
+
         return cheakExit("Master", userName);
     }
-
+    public  String encryptPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder encryptedPassword = new StringBuilder();
+            for (byte b : hash) {
+                encryptedPassword.append(String.format("%02x", b));
+            }
+            return encryptedPassword.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("加密算法不可用", e);
+        }
+    }
     private boolean checkLoin(String tableName, String userName, String password) {
         try {
             Class.forName(driverName);
@@ -177,6 +200,7 @@ class LogIn {
     public String register(String userName, String password) {
         //随机生产一个id，并将id,userName和password插入数据库的UserMaster表中id,name,password三个字段下，
         String id = regest.getRandomID();
+        password=encryptPassword(password);
         String baseInfo = id + "," + userName + "," + password;
         List<String> userBaseInfo = List.of(baseInfo);
         regest.inertBaseInfo("PasswordMaster", userBaseInfo);

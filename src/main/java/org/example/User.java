@@ -145,6 +145,7 @@ class PasswordUser{
     private final String dbURL = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
     private final String driverName = "org.sqlite.JDBC";
     PasswordMaster passwordMaster=new PasswordMaster();
+    LogIn logIn=new LogIn();
     public boolean forgotPassword(String username, String email) {
         boolean sucess = false;
         if (isMatch(username, email)) {
@@ -152,6 +153,7 @@ class PasswordUser{
             sendEmail(email, newPassword);
             System.out.println("新密码已发送到您的邮箱，请查收。");
             System.out.println("请使用新密码登录，并尽快修改为您熟悉的密码。");
+            newPassword=logIn.encryptPassword(newPassword);
             fixPassword(username, newPassword);
             sucess = true;
         } else {
@@ -212,6 +214,7 @@ class PasswordUser{
         return password.toString();
     }
     public void fixPassword(String userName, String passwordNew) {
+        passwordNew=logIn.encryptPassword(passwordNew);
         if (passwordMaster.modifypassword("PasswordMaster", userName, passwordNew)) {
             System.out.println("修改成功！");
         } else {

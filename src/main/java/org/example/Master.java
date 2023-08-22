@@ -177,8 +177,9 @@ class Master {
 class PasswordMaster {
     private final String bdULI = "jdbc:sqlite:" + System.getProperty("user.dir") + "//ShopSystem.sqlite";
     private final String driverName = "org.sqlite.JDBC";
-
+    LogIn logIn=new LogIn();
     public void modifySelfPassword(String userName, String newPassword) {
+        newPassword=logIn.encryptPassword(newPassword);
         if (modifypassword("Master", userName, newPassword)) {
             System.out.println("修改成功！");
         } else {
@@ -187,7 +188,8 @@ class PasswordMaster {
     }
 
     public void resetUserPassword(String userName) {
-        if (modifypassword("PasswordMaster", userName, "@SPGL1234system")) {
+        String newPassword=logIn.encryptPassword("@SPGL1234system");
+        if (modifypassword("PasswordMaster", userName,newPassword )) {
             System.out.println("重置成功！");
         } else {
             System.out.println("重置失败！");
