@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 class LogIn {
-
     Regest regest = new Regest();
     IsTrueEnter isTrueEnter = new IsTrueEnter();
     Scanner scanner = new Scanner(System.in);
@@ -39,10 +38,11 @@ class LogIn {
                     if (adminExit(userName)&&count<5) {
                         System.out.print("密码：");
                         password = scanner.next();
-                    } else {
                         if(count<5&&count>3){
                             System.out.print("您已多次失败！再有三次错误账户即将被锁定！");
                         }
+                    } else {
+
                         System.out.println("用户名或密码错误，是否继续？（Y/N）");
                         String confirm = scanner.next();
                         if (!confirm.equalsIgnoreCase("Y")) {
@@ -75,10 +75,10 @@ class LogIn {
                         System.out.print("密码：");
                         password = isTrueEnter.passwordhefa(scanner.next());
                         scanner.nextLine();
-                    } else {
                         if(count<5&&count>3){
                             System.out.print("您已多次失败！再有三次错误账户即将被锁定！");
                         }
+                    } else {
                         System.out.println("用户名或密码错误，是否继续？（Y/N）");
                         String confirm = scanner.next();
                         if (!confirm.equalsIgnoreCase("Y")) {
@@ -86,7 +86,6 @@ class LogIn {
                             break;
                         }
                     }
-
                 }
                 regest.setCurrentUserName(userName);
                 ShopUser shopUser=new ShopUser();
@@ -206,7 +205,6 @@ class LogIn {
         regest.inertBaseInfo("PasswordMaster", userBaseInfo);
         return id;
     }
-
 }
 
 class Regest {
